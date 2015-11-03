@@ -8,7 +8,7 @@ buildscript {
   }
 
   dependencies {
-    classpath group: 'com.eddgrant', name: 'maven-password-decrypter', version: '0.0.3'
+    classpath group: 'com.eddgrant', name: 'maven-password-decrypter', version: '0.0.4'
   }
 }
 
