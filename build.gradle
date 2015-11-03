@@ -1,0 +1,65 @@
+buildscript {
+
+  repositories {
+    mavenCentral()
+    maven {
+      url "http://dl.bintray.com/eddgrant/maven"
+    }
+  }
+
+  dependencies {
+    classpath group: 'com.eddgrant', name: 'maven-password-decrypter', version: '0.0.3'
+  }
+}
+
+plugins {
+  id 'java'
+  id 'maven'
+}
+
+import com.eddgrant.mpd.MavenPasswordDecrypter
+
+group 'com.eddgrant'
+version '0.0.1'
+
+sourceCompatibility = 1.5
+
+project.ext {
+  /**
+   * In practise this will usually point at the '.m2' folder of the user that owns the Maven credentials.
+   * For example on a Jenkins box this might be '~jenkins/.m2'
+   */
+  mavenFilesDir = "src/test/resources/example-files/.m2"
+  mavenSettingsSecurityFilePath = "${mavenFilesDir}/settings-security.xml"
+  mavenSettingsFilePath = "${mavenFilesDir}/settings-with-multiple-server-entries.xml"
+
+  releaseRepoUrl = "https://artifactory.eddgrant.com/artifactory/libs-releases-local"
+  snapshotRepoUrl = "https://artifactory.eddgrant.com/artifactory/libs-snapshots-local"
+}
+
+def mpd = new MavenPasswordDecrypter()
+def serverDetails = mpd.getServerDetail(mavenSettingsSecurityFilePath,
+                                        mavenSettingsFilePath,
+                                        "1") //This corresponds to the server 'id' in the 'settings.xml' file
+def artifactoryUsername = serverDetails.username
+def artifactoryPassword = serverDetails.decryptedPassword
+
+if(artifactoryUsername && artifactoryPassword) {
+  println("Artifactory credentials supplied. 'uploadArchives' task will be configured.")
+  uploadArchives {
+    repositories {
+      mavenDeployer {
+        repository(url: releaseRepoUrl) {
+          authentication(userName: artifactoryUsername, password: artifactoryPassword)
+        }
+        snapshotRepository(url: snapshotRepoUrl) {
+          authentication(userName: artifactoryUsername, password: artifactoryPassword)
+        }
+      }
+    }
+  }
+  uploadArchives.dependsOn(assemble)
+}
+else {
+  println("Artifactory credentials not supplied. 'uploadArchives' task will not be configured.")
+}

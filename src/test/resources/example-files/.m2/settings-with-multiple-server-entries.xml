@@ -1,0 +1,23 @@
+
+<!--
+  All passwords in this file were encrypted with a master password of 'This is my master password'
+-->
+<settings>
+  <servers>
+    <server>
+      <id>1</id>
+      <username>u1</username>
+      <password>This is server 1's password {ScOluri2uPsHdurnBR4UPlCidn5Yllb/vBPkQIevKyz1pHe11A0Lpw48foQf65eT}</password>
+    </server>
+    <server>
+      <id>2</id>
+      <username>u2</username>
+      <password>This is server 2's password {pgt7K+js3SsHULVNxo/U9mHI2gEhkUi1FmOnJ1ZDjY7r4nQwIJmXx94BCR0xwqYW}</password>
+    </server>
+    <server>
+      <id>3</id>
+      <username>u3</username>
+      <password>This is server 3's password {mU3PuwllB5wHbbLMkJ2T9wpA7Y2EHVVR4aDIDgprkeUPduc7DONbjBMXg6ViyfOl}</password>
+    </server>
+  </servers>
+</settings>
